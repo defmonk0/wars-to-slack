@@ -9,4 +9,6 @@ setEnvironmentVariables();
 logEnv();
 
 // Start processing.
-runTask(() => {});
+runTask(() => {
+	console.log("Called finish function.");
+});

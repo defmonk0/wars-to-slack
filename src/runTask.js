@@ -29,6 +29,9 @@ var runTask = function(finish) {
 		// Grab the list of wars.
 		var wars = JSON.parse(body);
 
+		// Track our processed count.
+		var processedCount = 0;
+
 		// Gotta make a call for each of these.
 		wars.map(war => {
 			// Set up our new options.
@@ -42,10 +45,22 @@ var runTask = function(finish) {
 
 			// Create a callback for the war details request.
 			var detailsCallback = (error, response, body) => {
+				// Handle errors.
 				if (error || response.statusCode !== 200) {
+					// Log.
 					console.error(
 						"An error occurred with one of the wars. Ignoring."
 					);
+
+					// Increment the number of callbacks we've processed.
+					processedCount++;
+
+					// If we're done, call finish.
+					if (processedCount == wars.length) {
+						finish();
+					}
+
+					// Stop executing.
 					return;
 				}
 
@@ -68,8 +83,24 @@ var runTask = function(finish) {
 					sendSlackMessage(
 						war,
 						involvement,
-						(error, response, body) => {}
+						(error, response, body) => {
+							// Increment the number of callbacks we've processed.
+							processedCount++;
+
+							// If we're done, call finish.
+							if (processedCount == wars.length) {
+								finish();
+							}
+						}
 					);
+				} else {
+					// Increment the number of callbacks we've processed.
+					processedCount++;
+
+					// If we're done, call finish.
+					if (processedCount == wars.length) {
+						finish();
+					}
 				}
 			};
 
