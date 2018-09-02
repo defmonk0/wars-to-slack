@@ -1,0 +1,6 @@
+{
+	"allianceIds": "123, 456, 789",
+	"channel": "#channel-name",
+	"corporationIds": "123, 456, 789",
+	"slackHookURL": "https://hooks.slack.com/services/YOUR/SLACK/HOOK"
+}

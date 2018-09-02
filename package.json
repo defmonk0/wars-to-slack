@@ -1,0 +1,29 @@
+{
+    "author": "Steve Harrigan",
+    "bugs": {
+        "url": "https://github.com/defmonk0/wars-to-slack/issues"
+    },
+    "contributors": [],
+    "dependencies": {
+        "request": "^2.79.0",
+        "slack-node": "^0.1.8"
+    },
+    "description": "Post war notifications Slack via ESI.",
+    "homepage": "https://github.com/defmonk0/wars-to-slack#readme",
+    "keywords": [
+        "eve-online",
+        "slack"
+    ],
+    "license": "MIT",
+    "main": "index.js",
+    "name": "wars-to-slack",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/defmonk0/wars-to-slack.git"
+    },
+    "scripts": {
+        "build": "cd lambda; zip -r Lambda.zip ../node_modules index.js ../src; cd ..",
+        "start": "node node/index.js"
+    },
+    "version": "1.0.0"
+}
