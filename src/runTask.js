@@ -67,8 +67,16 @@ var runTask = function(finish) {
 				// Grab the war details.
 				var war = JSON.parse(body);
 
+				// Compare the date to now.
+				active = true;
+				if (war.finished != undefined && war.finished != null) {
+					var now = new Date();
+					var then = new Date(war.finished);
+					active = now < then;
+				}
+
 				// Get our involvement.
-				var involvement = involvedInWar(
+				var involved = involvedInWar(
 					war,
 					process.env.allianceIds
 						.split(",")
@@ -79,21 +87,24 @@ var runTask = function(finish) {
 				);
 
 				// Send the message if involved.
-				if (involvement) {
-					sendSlackMessage(
-						war,
-						involvement,
-						(error, response, body) => {
-							// Increment the number of callbacks we've processed.
-							processedCount++;
+				if (active && involved) {
+					sendSlackMessage(war, involved, (error, response, body) => {
+						// Increment the number of callbacks we've processed.
+						processedCount++;
 
-							// If we're done, call finish.
-							if (processedCount == wars.length) {
-								finish();
-							}
+						// If we're done, call finish.
+						if (processedCount == wars.length) {
+							finish();
 						}
-					);
+					});
 				} else {
+					// Log that we we have a war past its end time for posterity.
+					if (involved) {
+						console.log(
+							"Found a war, but it's past the finished date."
+						);
+					}
+
 					// Increment the number of callbacks we've processed.
 					processedCount++;
 
